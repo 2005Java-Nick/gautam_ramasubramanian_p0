@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class SnapShotFileTest {
 
   private SnapShotFile file;
-  private static String PATH = "/home/username/Documents/revature/test-folder/test-file";
+  private static String PATH = "home/username/Documents/revature/test-folder/test-file";
   private static byte[] CONTENT = { 104, 100, -128, -3, 89, 35, 82, -93, -2, 93, -49, 84, -123 };
 
   @Before
@@ -42,6 +42,11 @@ public class SnapShotFileTest {
     byte[] content = file.getContent();
     content[0] = 30;
     assertEquals("SnapShotFile content does not change if CONTENT constant changes", file.getContent()[0], 104);
+  }
+
+  @Test
+  public void testGetFileType() {
+    assertEquals("SnapShotFile getType returns 'file'", file.getType(), "file");
   }
 
 }

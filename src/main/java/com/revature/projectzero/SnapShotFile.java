@@ -46,4 +46,8 @@ public class SnapShotFile {
     this.content = this.deepCopy(content);
   }
 
+  public String getType() {
+    return "file";
+  }
+
 }
