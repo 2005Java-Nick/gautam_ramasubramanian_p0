@@ -2,7 +2,6 @@ package com.revature.projectzero;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -22,7 +21,7 @@ public class SnapShotFileTest {
 
   @Test
   public void testGetPath() {
-    assertEquals("SnapShotFile getPath should return PATH constant - /home/username/..../testfile", PATH, file.getPath());
+    assertTrue("SnapShotFile getPath should return PATH constant - home/username/..../testfile", file.getPath().equals(PATH));
   }
 
   @Test 
@@ -46,7 +45,7 @@ public class SnapShotFileTest {
 
   @Test
   public void testGetFileType() {
-    assertEquals("SnapShotFile getType returns 'file'", file.getType(), "file");
+    assertTrue("SnapShotFile getType returns 'file'", file.getType().equals("file"));
   }
 
 }

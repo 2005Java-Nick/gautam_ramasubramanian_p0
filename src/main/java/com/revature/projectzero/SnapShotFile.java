@@ -1,31 +1,22 @@
 package com.revature.projectzero;
 
-public class SnapShotFile {
+public class SnapShotFile extends SnapShotDirectory {
 
-  // Object consists of filepath and content
-  private String path;
+  // SnapShot file has content
   private byte[] content;
 
   // Have default constructor private
   private SnapShotFile() {
-    
-  } 
+    // To make sure it does not break the fact that
+      // SnapShotDirectory default constructor is private
+    super("");
+  }
 
   // Make sure the only constructor that the program is using
   // is this one, with two arguments.
   public SnapShotFile(String path, byte[] content) {
-    this.setPath(path);
+    super(path);
     this.setContent(content);
-  }
-
-  // path getter method
-  public String getPath() {
-    return this.path;
-  }
-
-  // path setter method
-  private void setPath(String path) {
-    this.path = path;
   }
 
   private byte[] deepCopy(byte[] input) {
@@ -46,6 +37,7 @@ public class SnapShotFile {
     this.content = this.deepCopy(content);
   }
 
+  @Override
   public String getType() {
     return "file";
   }
