@@ -28,14 +28,22 @@ public class SnapShotFile {
     this.path = path;
   }
 
+  private byte[] deepCopy(byte[] input) {
+    byte[] output = new byte[input.length];
+    for (int i = 0; i < input.length; i++) {
+      output[i] = input[i];
+    }
+    return output;
+  }
+
   // content getter method
   public byte[] getContent() {
-    return this.content;
+    return this.deepCopy(this.content);
   }
   
   // content setter method
   private void setContent(byte[] content) {
-    this.content = content;
+    this.content = this.deepCopy(content);
   }
 
 }
