@@ -1,20 +1,22 @@
 package com.revature.projectzero;
 
-public class SnapShotDirectory {
+import java.io.Serializable;
+
+public class SnapShotDirectory implements SnapShotItem, Serializable {
 
   // SnapShot directory (including files) have content
   private String path;
 
   // Have default constructor private
   private SnapShotDirectory() {
-       
+
   } 
 
   public SnapShotDirectory(String path) {
     this.setPath(path);
   }
 
-  // path getter method
+  @Override
   public String getPath() {
     return this.path;
   }
@@ -24,6 +26,7 @@ public class SnapShotDirectory {
     this.path = path;
   }
 
+  @Override
   public String getType() {
     return "directory";
   }

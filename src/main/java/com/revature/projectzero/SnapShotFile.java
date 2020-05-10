@@ -1,21 +1,22 @@
 package com.revature.projectzero;
 
-public class SnapShotFile extends SnapShotDirectory {
+import java.io.Serializable;
 
-  // SnapShot file has content
+public class SnapShotFile implements SnapShotItem, Serializable {
+
+  // SnapShot file has path and content
+  private String path;
   private byte[] content;
 
   // Have default constructor private
   private SnapShotFile() {
-    // To make sure it does not break the fact that
-      // SnapShotDirectory default constructor is private
-    super("");
+  
   }
 
   // Make sure the only constructor that the program is using
   // is this one, with two arguments.
   public SnapShotFile(String path, byte[] content) {
-    super(path);
+    this.setPath(path);
     this.setContent(content);
   }
 
@@ -25,6 +26,16 @@ public class SnapShotFile extends SnapShotDirectory {
       output[i] = input[i];
     }
     return output;
+  }
+
+  @Override
+  public String getPath() {
+    return this.path;
+  }
+
+  // path setter method
+  private void setPath(String path) {
+    this.path = path;
   }
 
   // content getter method
