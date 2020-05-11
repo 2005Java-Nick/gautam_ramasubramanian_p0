@@ -12,6 +12,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 public class SnapShotBuilder {
   
+  private static Path cwdPath;
   private static ArrayList<SnapShotItem> snapShot;
   
   private static SimpleFileVisitor<Path> snapShotFileVisitor = new SimpleFileVisitor<Path>() {
@@ -27,6 +28,8 @@ public class SnapShotBuilder {
     public FileVisitResult preVisitDirectory(Path dirPath, BasicFileAttributes attrs) {
       if (dirPath.endsWith(".projectzero.snapshots")) {
         return FileVisitResult.SKIP_SUBTREE;
+      } else if (dirPath.endsWith(cwdPath.toString())) {
+        return FileVisitResult.CONTINUE;
       }
       else {
         snapShot.add(new SnapShotDirectory(dirPath.toString()));
@@ -38,6 +41,7 @@ public class SnapShotBuilder {
 
   // Shallow copy - beware
   public static ArrayList<SnapShotItem> build(Path rootPath) throws IOException {
+    cwdPath = rootPath;
     snapShot = new ArrayList<SnapShotItem>();
     Files.walkFileTree(rootPath, snapShotFileVisitor);
     return snapShot;
