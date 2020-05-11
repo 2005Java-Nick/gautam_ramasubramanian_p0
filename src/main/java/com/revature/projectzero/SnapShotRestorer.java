@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.attribute.BasicFileAttributes;
 
@@ -47,6 +48,7 @@ public class SnapShotRestorer {
     for (SnapShotItem item: snapShot) {
       if (item.getType().equals("file")) {
         Files.createFile(Paths.get(item.getPath()));
+        Files.write(Paths.get(item.getPath()), item.getContent(), StandardOpenOption.WRITE);
       }
       if (item.getType().equals("directory")) {
         Files.createDirectory(Paths.get(item.getPath()));

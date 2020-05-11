@@ -31,4 +31,9 @@ public class SnapShotDirectory implements SnapShotItem, Serializable {
     return "directory";
   }
 
+  @Override
+  public byte[] getContent() {
+    return null;
+  }
+
 }

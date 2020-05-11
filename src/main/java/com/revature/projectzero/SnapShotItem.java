@@ -6,4 +6,6 @@ public interface SnapShotItem {
 
   public String getType();
 
+  public byte[] getContent();
+
 }
