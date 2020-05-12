@@ -36,22 +36,26 @@ public class App {
       Path rootDirPath = Paths.get(System.getProperty("user.dir"));
       Path saveImagePath = Paths.get(rootDirPath.toString(), ".projectzero.snapshots", ".projectzero.snapshot");
 
-      if (args[0].equals("save")) {
-        logger.info("Saving snapshot of directory");
-        ArrayList<SnapShotItem> snapShot = SnapShotBuilder.build(rootDirPath);
-        FileOutputStream fout = new FileOutputStream(saveImagePath.toString());
-        ObjectOutputStream oos = new ObjectOutputStream(fout);
-        oos.writeObject(snapShot);
-      }
-      else if (args[0].equals("restore")) {
-        logger.info("Restoring from snapshot of directory");
-        FileInputStream fin = new FileInputStream(saveImagePath.toString());
-        ObjectInputStream ois = new ObjectInputStream(fin);
-        ArrayList<SnapShotItem> snapShot = (ArrayList<SnapShotItem>) ois.readObject();
-        SnapShotRestorer.restore(rootDirPath, snapShot);
-      } else {
-        logger.info("Program argument is not valid");
-        System.out.println(getHelpMessage()); 
+      try {
+        if (args[0].equals("save")) {
+          logger.info("Saving snapshot of directory");
+          ArrayList<SnapShotItem> snapShot = SnapShotBuilder.build(rootDirPath);
+          FileOutputStream fout = new FileOutputStream(saveImagePath.toString());
+          ObjectOutputStream oos = new ObjectOutputStream(fout);
+          oos.writeObject(snapShot);
+        }
+        else if (args[0].equals("restore")) {
+          logger.info("Restoring from snapshot of directory");
+          FileInputStream fin = new FileInputStream(saveImagePath.toString());
+          ObjectInputStream ois = new ObjectInputStream(fin);
+          ArrayList<SnapShotItem> snapShot = (ArrayList<SnapShotItem>) ois.readObject();
+          SnapShotRestorer.restore(rootDirPath, snapShot);
+        } else {
+          logger.info("Program argument is not valid");
+          System.out.println(getHelpMessage()); 
+        }
+      } catch (Exception e) {
+        logger.error("Exception occurred in program." + e.toString());
       }
     
     }
