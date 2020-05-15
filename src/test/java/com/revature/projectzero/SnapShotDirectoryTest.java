@@ -1,5 +1,5 @@
 package com.revature.projectzero;
-
+/*
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -25,4 +25,4 @@ public class SnapShotDirectoryTest {
     assertTrue("SnapShotDirectory getType should return 'directory'", dir.getType().equals("directory"));
   } 
 
-}
+}*/

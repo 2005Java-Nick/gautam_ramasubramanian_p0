@@ -18,7 +18,7 @@ import java.util.ArrayList;
  *
  */
 public class App {
-    
+/*    
     private static Logger logger = Logger.getLogger(App.class);
     
     private static String getHelpMessage() {
@@ -59,5 +59,5 @@ public class App {
       }
     
     }
-
+*/
 }

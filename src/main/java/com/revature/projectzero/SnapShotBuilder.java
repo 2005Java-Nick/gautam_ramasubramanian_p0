@@ -11,11 +11,22 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.attribute.BasicFileAttributes;
 
 public class SnapShotBuilder {
+/*
+  private byte[] getContent(String filePath) {
+    try (File f = new File(filePath), FileInputStream fin = new FileInputStream(filePath)) {
+      byte[] content = new byte[f.length()];
+      return fin.read(content);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
   
-  private static Path cwdPath;
-  private static ArrayList<SnapShotItem> snapShot;
   
-  private static SimpleFileVisitor<Path> snapShotFileVisitor = new SimpleFileVisitor<Path>() {
+  
+  private Path cwdPath;
+  private ArrayList<SnapShotItem> snapShot;
+
+  private SimpleFileVisitor<Path> snapShotFileVisitor = new SimpleFileVisitor<Path>() {
     @Override
     public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) 
       throws IOException, OutOfMemoryError, SecurityException {
@@ -39,12 +50,17 @@ public class SnapShotBuilder {
 
   };
 
+  private boolean addSnapShotItem(SnapShotItem snapShotItem) {
+    snapShot.add(snapShotItem);
+  } 
+  
+
   // Shallow copy - beware
-  public static ArrayList<SnapShotItem> build(Path rootPath) throws IOException {
+  public ArrayList<SnapShotItem> build(Path rootPath) throws IOException {
     cwdPath = rootPath;
     snapShot = new ArrayList<SnapShotItem>();
     Files.walkFileTree(rootPath, snapShotFileVisitor);
     return snapShot;
   }
-
+*/
 }

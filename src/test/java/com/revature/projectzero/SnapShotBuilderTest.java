@@ -1,6 +1,8 @@
+/*
 package com.revature.projectzero;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
@@ -15,8 +17,19 @@ import java.nio.file.StandardOpenOption;
 
 import java.util.ArrayList;
 
+@RunWith(MockitoJUnitRunner)
 public class SnapShotBuilderTest {
-/*
+  
+  SnapShotBuilder ssb = mock(SnapShotBuilder.class);
+
+
+  @Test
+  public void testGetContent() {
+
+  }
+    
+}
+
   ArrayList<Path> dirPath;
   ArrayList<Path> filePath;
   ArrayList<SnapShotItem> snapShot;
@@ -57,5 +70,4 @@ public class SnapShotBuilderTest {
     Files.delete(dirPath.get(0));
   }
 */
-}
 
