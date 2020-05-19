@@ -9,10 +9,10 @@ import java.util.ArrayList;
 
 public class Initializer {
 
-  private ArrayList<String> sqlQueries;
+  private ArrayList<String> sqlFunctions;
 
   private void createTables() {
-    sqlQueries.add(String.join("", 
+    sqlFunctions.add(String.join("", 
           "create or replace procedure create_tables() language plpgsql as ",
           "$$ ",
           "begin ",
@@ -28,7 +28,7 @@ public class Initializer {
   }
 
   private void insertRootDir() {
-    sqlQueries.add(String.join("",
+    sqlFunctions.add(String.join("",
           "create or replace procedure insert_root_dir(argname text) language plpgsql as ",
           "$$ ",
           "begin ",
@@ -39,7 +39,7 @@ public class Initializer {
   }
 
   private void getRootId() {
-    sqlQueries.add(String.join("",
+    sqlFunctions.add(String.join("",
           "create or replace function get_root_id(argname text) returns int as ",
           "$$ ",
           "begin ",
@@ -50,7 +50,7 @@ public class Initializer {
   }
 
   private void insertBranch() {
-    sqlQueries.add(String.join("", 
+    sqlFunctions.add(String.join("", 
           "create or replace procedure insert_branch(argname text, rootid int) language plpgsql as ",
           "$$ ",
           "begin ",
@@ -61,7 +61,7 @@ public class Initializer {
   }
   
   private void getBranchId() {
-    sqlQueries.add(String.join("",
+    sqlFunctions.add(String.join("",
           "create or replace function get_branch_id(argname text, rootid int) returns int as ",
           "$$ ",
           "begin ",
@@ -72,7 +72,7 @@ public class Initializer {
   }
 
   private void insertCommit() {
-    sqlQueries.add(String.join("",
+    sqlFunctions.add(String.join("",
           "create or replace procedure insert_commit(argid int, argmessage text, rootid int) language plpgsql as ",
           "$$ ",
           "begin ",
@@ -83,7 +83,7 @@ public class Initializer {
   }
 
   private void getCommitId() {
-    sqlQueries.add(String.join("",
+    sqlFunctions.add(String.join("",
           "create or replace function get_commit_id(argid int) returns int as ",
           "$$ ",
           "begin ",
@@ -94,7 +94,7 @@ public class Initializer {
   }
 
   private void insertBC() {
-    sqlQueries.add(String.join("",
+    sqlFunctions.add(String.join("",
           "create or replace procedure insert_bc(argbranchid int, argcommitid int, argorder int) language plpgsql as ",
           "$$ ",
           "begin ",
@@ -105,7 +105,7 @@ public class Initializer {
   }
 
   private void insertChange() {
-    sqlQueries.add(String.join("",
+    sqlFunctions.add(String.join("",
           "create or replace procedure insert_change() language plpgsql as ",
           "$$ ",
           "begin ",
@@ -115,8 +115,23 @@ public class Initializer {
           " $$;"));
   }
 
+  private void dropTables() {
+    sqlFunctions.add(String.join("",
+          "create or replace procedure drop_tables() language plpgsql as ",
+          "$$ ",
+          "begin ",
+          "drop table pz.rootdir; ",
+          "drop table pz.branch; ",
+          "drop table pz.commit; ",
+          "drop table pz.bc_join; ",
+          "drop table pz.change; ",
+          "commit; ",
+          "end; ",
+          " $$;"));
+  }
+
   public Initializer() {
-    sqlQueries = new ArrayList<String>();
+    sqlFunctions = new ArrayList<String>();
     createTables();
     insertRootDir();
     getRootId();
@@ -125,11 +140,46 @@ public class Initializer {
     insertCommit();
     getCommitId();
     insertBC(); 
-    insertChange(); 
+    insertChange();
+    dropTables(); 
   }
 
-  public void initialize(Connection conn) {
-     
+  private void initialize(Connection conn) {
+    PreparedStatement ps;
+    for (String query : sqlFunctions) {
+      try {
+        ps = conn.prepareStatement(query);
+        ps.executeUpdate();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  private void callProcedure(String procedure_name, Connection conn) {
+    PreparedStatement ps;
+    try {
+      ps = conn.prepareStatement("call ?();");
+      ps.setString(1, procedure_name);
+      ps.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private int callIntValuedFunction(String function_name, Connection conn) {
+    PreparedStatement ps;
+    int result = -1;
+    try {
+      ps = conn.prepareStatement("select ?();");
+      ps.setString(1, function_name);
+      ResultSet rs = ps.executeQuery();
+      rs.next();
+      result = rs.getInt("id");
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return result;
   }
 
 }

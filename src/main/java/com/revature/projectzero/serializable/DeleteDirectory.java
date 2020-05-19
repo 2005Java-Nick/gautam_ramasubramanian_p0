@@ -1,10 +1,9 @@
 package com.revature.projectzero.serializable;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /* Represents the deletion of a directory */
-public class DeleteDirectory implements Change, Serializable {
+public class DeleteDirectory extends Change implements Serializable {
    
   private String pathString;
 
@@ -28,9 +27,7 @@ public class DeleteDirectory implements Change, Serializable {
     return null;
   }
 
-  public boolean equals(DeleteDirectory c) {
-    return this.getPathString().equals(c.getPathString());
+  public int classOrder() {
+    return 2;
   }
-
-
 }

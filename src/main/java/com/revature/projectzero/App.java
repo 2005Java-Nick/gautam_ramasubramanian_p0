@@ -6,7 +6,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Scanner;
 
 import com.revature.projectzero.serializable.*;
@@ -41,7 +41,7 @@ public class App {
       CommitHistory history;
 
       if (args[0].equals("init")) {
-        Commit commit = new Commit(Commiter.getRandomId(), new HashSet<Change>(), "initial commit");
+        Commit commit = new Commit(Commiter.getRandomId(), new TreeSet<Change>(), "initial commit");
         history = new CommitHistory(rootDirPath, "master", commit);
         serializer.createDirectory(saveImageDir);
         serializer.writeToFile(saveImagePath, history);

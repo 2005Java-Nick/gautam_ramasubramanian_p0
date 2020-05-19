@@ -2,7 +2,6 @@ package com.revature.projectzero.serializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 import java.io.Serializable;
 
 /* Represents commit history tree */

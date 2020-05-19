@@ -3,13 +3,13 @@ package com.revature.projectzero.worker;
 import com.revature.projectzero.serializable.*;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Arrays;
 
 public class CommitBuilder {
 
   public Commit buildCommit(HashMap<String, byte[]> previous, HashMap<String, byte[]> current, String id, String message) {
-    HashSet<Change> changes = new HashSet<Change>();
+    TreeSet<Change> changes = new TreeSet<Change>();
     for (String key : previous.keySet()) {
       if (!current.keySet().contains(key)) {
         if (previous.get(key) == null) {
