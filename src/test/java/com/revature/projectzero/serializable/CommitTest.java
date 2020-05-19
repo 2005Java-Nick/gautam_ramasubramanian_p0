@@ -2,7 +2,7 @@ package com.revature.projectzero.serializable;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -23,13 +23,13 @@ public class CommitTest {
   Method setPrivateId, setPrivateChanges, setPrivateMessage;
   String id = "6df2e4";
   String message = "example commit";
-  ArrayList<Change> changes;
+  HashSet<Change> changes;
   int numChanges = 4;
 
 
   @Before
   public void setPrivateMembersAccessible() throws NoSuchFieldException, NoSuchMethodException {
-    changes = new ArrayList<Change>();
+    changes = new HashSet<Change>();
     for (int i = 0; i < numChanges; i++) {
       changes.add(mock(Change.class));
     }
@@ -72,9 +72,9 @@ public class CommitTest {
   @Test
   public void testConstructorSetChanges() throws IllegalAccessException {
     assertTrue("private field changes is equal in reference to what was passed to constructor",
-      (ArrayList<Change>) privateChanges.get(commit) == changes);
+      (HashSet<Change>) privateChanges.get(commit) == changes);
     assertTrue("private field changes is equal in value to what was passed to constructor",
-      ((ArrayList<Change>) privateChanges.get(commit)).equals(changes)); 
+      ((HashSet<Change>) privateChanges.get(commit)).equals(changes)); 
   }
 
   @Test
@@ -115,13 +115,13 @@ public class CommitTest {
 
   @Test
   public void testSetChanges() throws IllegalAccessException, InvocationTargetException {
-    ArrayList<Change> newChanges = new ArrayList<Change>();
+    HashSet<Change> newChanges = new HashSet<Change>();
     newChanges.add(mock(Change.class));
     setPrivateChanges.invoke(commit, newChanges);
     assertTrue("setChanges method changed private field changes to local variable newChanges (reference)", 
-        (ArrayList<Change>) privateChanges.get(commit) == newChanges);
+        (HashSet<Change>) privateChanges.get(commit) == newChanges);
     assertTrue("setChanges method changed private field changes to local variable newChanges (value)", 
-        ((ArrayList<Change>) privateChanges.get(commit)).equals(newChanges));
+        ((HashSet<Change>) privateChanges.get(commit)).equals(newChanges));
   }
 
   @Test
