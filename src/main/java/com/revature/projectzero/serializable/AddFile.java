@@ -1,9 +1,10 @@
 package com.revature.projectzero.serializable;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /* Represents the adding of a file */
-public class AddFile implements Change, Serializable {
+public class AddFile implements Change,Serializable {
   
   private String pathString;
   private byte[] content;
@@ -32,5 +33,10 @@ public class AddFile implements Change, Serializable {
   public byte[] getContent() {
     return this.content;
   }
+
+  public boolean equals(AddFile c) {
+    return this.getPathString().equals(c.getPathString()) && Arrays.equals(this.getContent(), c.getContent());
+  }
+
 
 }

@@ -1,20 +1,20 @@
 package com.revature.projectzero.serializable;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.io.Serializable;
 
 /* Represents a Commit in version control */
 public class Commit implements Serializable {
 
   private String id;
-  private ArrayList<Change> changes;
+  private HashSet<Change> changes;
   private String message;
 
   private Commit() {
 
   }
 
-  public Commit(String id, ArrayList<Change> changes, String message) {
+  public Commit(String id, HashSet<Change> changes, String message) {
     this.setId(id);
     this.setChanges(changes);
     this.setMessage(message);
@@ -24,7 +24,7 @@ public class Commit implements Serializable {
     this.id = id;
   }
 
-  private void setChanges(ArrayList<Change> changes) {
+  private void setChanges(HashSet<Change> changes) {
     this.changes = changes;
   }
 
@@ -36,7 +36,7 @@ public class Commit implements Serializable {
     return this.id;
   }
 
-  public ArrayList<Change> getChanges() {
+  public HashSet<Change> getChanges() {
     return this.changes;
   }
 

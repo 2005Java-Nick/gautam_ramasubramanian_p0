@@ -1,6 +1,7 @@
 package com.revature.projectzero.serializable;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /* Represents the deletion of a file */
 public class DeleteFile implements Change, Serializable {
@@ -32,5 +33,10 @@ public class DeleteFile implements Change, Serializable {
   public byte[] getContent() {
     return this.content;
   }
+
+  public boolean equals(DeleteFile c) {
+    return this.getPathString().equals(c.getPathString()) && Arrays.equals(this.getContent(), c.getContent());
+  }
+
 
 }

@@ -1,6 +1,7 @@
 package com.revature.projectzero.serializable;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /* Represents the adding of a directory */
 public class AddDirectory implements Change, Serializable {
@@ -26,5 +27,10 @@ public class AddDirectory implements Change, Serializable {
   public byte[] getContent() {
     return null;
   }
+
+  public boolean equals(AddDirectory c) {
+    return this.getPathString().equals(c.getPathString());
+  }
+
 
 }
