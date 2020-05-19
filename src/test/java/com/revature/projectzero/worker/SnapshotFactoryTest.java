@@ -1,6 +1,9 @@
 package com.revature.projectzero.worker;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertSame;
 
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
@@ -21,69 +24,94 @@ import org.junit.After;
 public class SnapshotFactoryTest {
   
   FileSystem fs;
+  HashMap<String, byte[]> snapshot;
+  HashMap<String, byte[]> newSnapshot;
 
-  private HashMap<String, byte[]> setUnixSnapshot() {
-    HashMap<String, byte[]> snapshot = new HashMap<String, byte[]>();
-    snapshot.put("d1", null);
-    snapshot.put("d1/f1", new byte[5]);
-    snapshot.put("d2", null);
-    snapshot.put("d2/f2", new byte[5]);
-    return snapshot;
-  }
-  
-  private HashMap<String, byte[]> setWindowsSnapshot() {
-    HashMap<String, byte[]> snapshot = new HashMap<String, byte[]>();
-    snapshot.put("d1", null);
-    snapshot.put("d1\\f1", new byte[5]);
-    snapshot.put("d2", null);
-    snapshot.put("d2\\f2", new byte[5]);
-    return snapshot;
+  private void setSnapshot() {
+    this.snapshot = new HashMap<String, byte[]>();
+    this.snapshot.put("d1", null);
+    this.snapshot.put(fs.getPath("d1","f1").toString(), new byte[5]);
+    this.snapshot.put("d2", null);
+    this.snapshot.put(fs.getPath("d2","f2").toString(), new byte[5]);
   }
 
-  private FileSystem setFileSystemtoUnix() {
-    return Jimfs.newFileSystem(Configuration.unix()); 
+  private void setSnapshot2() {
+    this.snapshot = new HashMap<String, byte[]>();
+    this.snapshot.put("f1", new byte[15]);
   }
 
-  private FileSystem setFileSystemtoWindows() {
-    return Jimfs.newFileSystem(Configuration.windows()); 
+  private void setFileSystemtoUnix() {
+    this.fs = Jimfs.newFileSystem(Configuration.unix()); 
   }
 
-  private void setFileSystem(FileSystem fs, HashMap<String, byte[]> snapshot) throws Exception {
-    Files.createDirectory(fs.getPath("root"));
-    Files.createDirectory(fs.getPath("root", "d1"));
-    Files.createDirectory(fs.getPath("root", "d2"));
-    Files.createFile(fs.getPath("root", "d1", "f1"));
-    Files.write(fs.getPath("root", "d1", "f1"), 
-        snapshot.get(fs.getPath("d1", "f1").toString()), StandardOpenOption.WRITE);
-    Files.createFile(fs.getPath("root", "d2", "f2"));
-    Files.write(fs.getPath("root", "d2", "f2"), 
-        snapshot.get(fs.getPath("d2", "f2").toString()), StandardOpenOption.WRITE);
+  private void setFileSystemtoWindows() {
+    this.fs = Jimfs.newFileSystem(Configuration.windows()); 
+  }
+
+  private void setFileSystem() throws Exception {
+    Files.createDirectory(this.fs.getPath("root"));
+    Files.createDirectory(this.fs.getPath("root", "d1"));
+    Files.createDirectory(this.fs.getPath("root", "d2"));
+    Files.createFile(this.fs.getPath("root", "d1", "f1"));
+    Files.write(this.fs.getPath("root", "d1", "f1"), 
+        this.snapshot.get(this.fs.getPath("d1", "f1").toString()), StandardOpenOption.WRITE);
+    Files.createFile(this.fs.getPath("root", "d2", "f2"));
+    Files.write(this.fs.getPath("root", "d2", "f2"), 
+        this.snapshot.get(this.fs.getPath("d2", "f2").toString()), StandardOpenOption.WRITE);
+  }
+
+  private void setFileSystem2() throws Exception {
+    Files.createDirectory(this.fs.getPath("root"));
+    Files.createDirectory(this.fs.getPath("root", "newroot"));
+    Files.createDirectory(this.fs.getPath("root", "newroot", ".snapshots"));
+    Files.createFile(this.fs.getPath("root", "newroot", ".snapshots", ".snapshot"));
+    Files.write(this.fs.getPath("root", "newroot", ".snapshots", ".snapshot"), new byte[3], StandardOpenOption.WRITE);
+    Files.createFile(this.fs.getPath("root", "newroot", "f1"));
+    Files.write(this.fs.getPath("root", "newroot", "f1"), this.snapshot.get("f1"), StandardOpenOption.WRITE); 
+  }
+
+  private void testSnapshots() {
+    assertEquals("Make snapshot of a root directory configuration. Size is as expected", snapshot.size(), newSnapshot.size());
+    assertEquals("Make snapshot of a root directory configuration. Keys are as expected", snapshot.keySet(), newSnapshot.keySet());
+    for (String key : snapshot.keySet()) {
+      assertArrayEquals("Make snapshot of a root directory configuration. Values are as expected", snapshot.get(key), newSnapshot.get(key));
+    } 
   }
 
   @Test
-  public void testBuildSnapshotUnix() throws Exception {
-    HashMap<String, byte[]> snapshot = setUnixSnapshot();
-    FileSystem fs = setFileSystemtoUnix();
-    setFileSystem(fs, snapshot);
-    HashMap<String, byte[]> newSnapshot = (new SnapshotFactory(fs, "root", ".snapshots")).buildSnapshot();
-    assertTrue("Make snapshot of a root directory configuration. Size is as expected", snapshot.size() == newSnapshot.size());
-    assertTrue("Make snapshot of a root directory configuration. Keys are as expected", snapshot.keySet().equals(newSnapshot.keySet()));
-    for (String key : snapshot.keySet()) {
-      assertTrue("Make snapshot of a root directory configuration. Values are as expected", Arrays.equals(snapshot.get(key), newSnapshot.get(key)));
-    }
+  public void testBuildSnapshotUnix1() throws Exception {
+    this.setFileSystemtoUnix();
+    this.setSnapshot();
+    this.setFileSystem();
+    this.newSnapshot = (new SnapshotFactory(fs, "root", ".snapshots")).buildSnapshot();
+    this.testSnapshots();
   }
-  
+ 
+  @Test
+  public void testBuildSnapshotUnix2() throws Exception {
+    this.setFileSystemtoUnix();
+    this.setSnapshot2();
+    this.setFileSystem2();
+    this.newSnapshot = (new SnapshotFactory(fs, fs.getPath("root", "newroot").toString(), ".snapshots")).buildSnapshot();
+    this.testSnapshots();
+  }
+ 
   @Test
   public void testBuildSnapshotWindows() throws Exception {
-    HashMap<String, byte[]> snapshot = setWindowsSnapshot();
-    FileSystem fs = setFileSystemtoWindows();
-    setFileSystem(fs, snapshot);
-    HashMap<String, byte[]> newSnapshot = (new SnapshotFactory(fs, "root", ".snapshots")).buildSnapshot();
-    assertTrue("Make snapshot of a root directory configuration. Size is as expected", snapshot.size() == newSnapshot.size());
-    assertTrue("Make snapshot of a root directory configuration. Keys are as expected", snapshot.keySet().equals(newSnapshot.keySet()));
-    for (String key : snapshot.keySet()) {
-      assertTrue("Make snapshot of a root directory configuration. Values are as expected", Arrays.equals(snapshot.get(key), newSnapshot.get(key)));
-    }
+    this.setFileSystemtoWindows();
+    this.setSnapshot();
+    this.setFileSystem();
+    this.newSnapshot = (new SnapshotFactory(fs, "root", ".snapshots")).buildSnapshot();
+    this.testSnapshots();
+  }
+ 
+  @Test
+  public void testBuildSnapshotWindows2() throws Exception {
+    this.setFileSystemtoWindows();
+    this.setSnapshot2();
+    this.setFileSystem2();
+    this.newSnapshot = (new SnapshotFactory(fs, fs.getPath("root", "newroot").toString(), ".snapshots")).buildSnapshot();
+    this.testSnapshots();
   }
 
 }
