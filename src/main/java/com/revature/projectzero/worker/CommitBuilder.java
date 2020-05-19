@@ -4,6 +4,7 @@ import com.revature.projectzero.serializable.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Arrays;
 
 public class CommitBuilder {
 
@@ -17,7 +18,7 @@ public class CommitBuilder {
           changes.add(new DeleteFile(key, previous.get(key)));
         }
       } else {
-        if (previous.get(key) != current.get(key)) {
+        if (previous.get(key) != null && current.get(key) != null && !Arrays.equals(previous.get(key),current.get(key))) {
           changes.add(new DeleteFile(key, previous.get(key)));
           changes.add(new AddFile(key, current.get(key)));
         }

@@ -38,6 +38,7 @@ public class CommitHistory implements Serializable {
     commitTree.get(this.headBranchId).add(initialcommit);    
     this.headCommitId = initialcommit.getId();
     this.headCommitIndex = 0;
+    this.snapshot = new HashMap<>();
   }
 
   private String getBranchName() {
@@ -68,7 +69,7 @@ public class CommitHistory implements Serializable {
     for (String key: commitTree.keySet()) {
       for (int i = 0; i < commitTree.get(key).size(); i++) {
         Commit c = commitTree.get(key).get(i);
-        if (c.getId() == commitId) {
+        if (c.getId().equals(commitId)) {
           this.headBranchId = key;
           this.headCommitIndex = i;
           this.headCommitId = commitId;

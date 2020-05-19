@@ -46,7 +46,7 @@ public class App {
         serializer.createDirectory(saveImageDir);
         serializer.writeToFile(saveImagePath, history);
       }
-      if (args[0].equals("commit")) {
+      else if (args[0].equals("commit")) {
         
         history = serializer.readFromFile(saveImagePath);
         Diagram.getTreeDiagram(history); 
@@ -67,6 +67,10 @@ public class App {
         Diagram.getTreeDiagram(history); 
         serializer.writeToFile(saveImagePath, history);
          
+      } 
+      else if (args[0].equals("info")) {
+        history = serializer.readFromFile(saveImagePath); 
+        System.out.println(history.getCurrentBranch().get(3).getChanges().size()); 
       } 
     
     }

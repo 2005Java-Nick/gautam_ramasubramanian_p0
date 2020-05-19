@@ -8,11 +8,13 @@ import java.util.ArrayList;
 public class Diagram {
 
   private static HashMap<String, String> lines;
-  private static HashMap<String, Boolean> shown; 
+  private static HashMap<String, Boolean> shown;
   
   // Outline
   public static String getTreeDiagram(CommitHistory history) {
     HashMap<String, ArrayList<Commit>> commitTree = history.getCommitTree();
+    lines = new HashMap<>();
+    shown = new HashMap<>();
     for (String key : commitTree.keySet()) {
       for (int i = 0; i < commitTree.get(key).size(); i++) {
         Commit c = commitTree.get(key).get(i);
@@ -20,7 +22,8 @@ public class Diagram {
           String s = "";
           int j = 0;
           while (j < i) { 
-            s += "|"; 
+            s += "|";
+            j++; 
           }
           s += "- " + "[" + c.getId() + "] " + "(" + c.getMessage() + ") " + key;
           lines.put(c.getId(), s);
@@ -32,7 +35,7 @@ public class Diagram {
         }
       }
     }
-    lines.put(history.getHeadCommitId(), lines.get(history.getHeadCommitId()) + "<- HEAD");
+    lines.put(history.getHeadCommitId(), lines.get(history.getHeadCommitId()) + " <- HEAD");
     String result = "";
     for (String key : commitTree.keySet()) {
       for (Commit c : commitTree.get(key)) {
@@ -43,6 +46,8 @@ public class Diagram {
         }
       }
     }
+    System.out.println("");
+    System.out.println(result);
     return result;
   }
 
