@@ -10,12 +10,16 @@ public class CommitHistory implements Serializable {
   
   /* Figure This out Later */
   private HashMap<String, ArrayList<Commit>> commitTree;
+
+  private HashMap<String, byte[]> snapshot;
   
   private String rootDirectory;
   
-  private String headCommitIndex;
+  private int headCommitIndex;
   private String headCommitId;
   private String headBranchId;
+
+  private int branchNameIndex = 0;
 
   // Getters to last 5 variables
   // Get Commit Names;
@@ -26,22 +30,72 @@ public class CommitHistory implements Serializable {
   
   }
 
-  public CommitHistory(String rootDirectory) {
+  public CommitHistory(String rootDirectory, String branchName, Commit initialcommit) {
     this.rootDirectory = rootDirectory;
     commitTree = new HashMap<>();
+    commitTree.put(branchName, new ArrayList<Commit>());
+    this.headBranchId = branchName;
+    commitTree.get(this.headBranchId).add(initialcommit);    
+    this.headCommitId = initialcommit.getId();
+    this.headCommitIndex = 0;
   }
 
-  public void addBranch(String branchName) {
+  private String getBranchName() {
+    this.branchNameIndex++;
+    return "branch_" + this.branchNameIndex;
+  }
+
+  private void addBranch(String branchName) {
     commitTree.put(branchName, new ArrayList<Commit>());
+    for (int i = 0; i <= this.headCommitIndex; i++) {
+      Commit c = commitTree.get(this.headBranchId).get(i);
+      commitTree.get(branchName).add(c);
+    }
     this.headBranchId = branchName;
   }
 
-  public void addCommit(Commit commit) {
-    
+  public void addCommit(Commit commit, HashMap<String, byte[]> snapshot) {
+    if (this.headCommitIndex != commitTree.get(this.headBranchId).size() - 1) {
+      this.addBranch(this.getBranchName());
+    }
+    commitTree.get(this.headBranchId).add(commit);
+    this.headCommitIndex++;
+    this.headCommitId = commit.getId();
+    this.snapshot = snapshot;
   }
 
-  public void setHead(String commitId) {
-    
+  public boolean setHead(String commitId) {
+    for (String key: commitTree.keySet()) {
+      for (int i = 0; i < commitTree.get(key).size(); i++) {
+        Commit c = commitTree.get(key).get(i);
+        if (c.getId() == commitId) {
+          this.headBranchId = key;
+          this.headCommitIndex = i;
+          this.headCommitId = commitId;
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
+  public ArrayList<Commit> getCurrentBranch() {
+    return this.commitTree.get(this.headBranchId);
+  }
+
+  public HashMap<String, ArrayList<Commit>> getCommitTree() {
+    return this.commitTree;
+  }
+
+  public int getHeadCommitIndex() {
+    return this.headCommitIndex;
+  }
+
+  public String getHeadCommitId() {
+    return this.headCommitId;
+  }
+
+  public HashMap<String, byte[]> getSnapshot() {
+    return this.snapshot;
+  }
 }

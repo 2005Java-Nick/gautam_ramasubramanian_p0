@@ -2,14 +2,12 @@ package com.revature.projectzero.worker;
 
 import com.revature.projectzero.serializable.*;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class CommitBuilder {
 
-  private static CommitBuilder commitBuilder;
-
-  public Commit buildCommit(TreeMap<String, byte[]> previous, TreeMap<String, byte[]> current, String id, String message) {
+  public Commit buildCommit(HashMap<String, byte[]> previous, HashMap<String, byte[]> current, String id, String message) {
     HashSet<Change> changes = new HashSet<Change>();
     for (String key : previous.keySet()) {
       if (!current.keySet().contains(key)) {

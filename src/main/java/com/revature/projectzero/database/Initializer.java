@@ -98,7 +98,7 @@ public class Initializer {
           "create or replace procedure insert_bc(argbranchid int, argcommitid int, argorder int) language plpgsql as ",
           "$$ ",
           "begin ",
-          "insert into pz.bc_join values (argbranchid, argcommitid, argorder); "
+          "insert into pz.bc_join values (argbranchid, argcommitid, argorder); ",
           "commit; ",
           "end; ",
           " $$;"));
@@ -128,7 +128,7 @@ public class Initializer {
     insertChange(); 
   }
 
-  public initialize(Connection conn) {
+  public void initialize(Connection conn) {
      
   }
 
