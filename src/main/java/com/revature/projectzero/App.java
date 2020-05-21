@@ -69,6 +69,7 @@ public class App {
       for (int i = 1; i < branchNames.size(); i++) {
         history.addBranch(branchNames.get(i));
       }
+      consoleDriver.getTreeDiagram(history); 
       serializer.createDirectory(saveImageDir);
       serializer.writeToFile(saveImagePath, history);
     }
@@ -85,6 +86,7 @@ public class App {
       history = serializer.readFromFile(saveImagePath);
       String branchName = consoleDriver.branchNameInput();
       dao.pull(branchName, history);
+      consoleDriver.getTreeDiagram(history); 
       serializer.writeToFile(saveImagePath, history);   
     }
 
