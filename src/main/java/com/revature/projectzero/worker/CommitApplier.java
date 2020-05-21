@@ -101,15 +101,19 @@ public class CommitApplier {
       return true;
     } catch (UnsupportedOperationException e) {
       // TODO
+      e.printStackTrace();
       return false;
     } catch (FileAlreadyExistsException e) {
       // TODO
+      e.printStackTrace();
       return false;
     } catch (IOException e) {
       // TODO
+      e.printStackTrace();
       return false;
     } catch (SecurityException e) {
       // TODO
+      e.printStackTrace();
       return false;
     }
   }
@@ -122,15 +126,19 @@ public class CommitApplier {
       return true;
     } catch (UnsupportedOperationException e) {
       // TODO
+      e.printStackTrace();
       return false;
     } catch (FileAlreadyExistsException e) {
       // TODO
+      e.printStackTrace();
       return false;
     } catch (IOException e) {
       // TODO
+      e.printStackTrace();
       return false;
     } catch (SecurityException e) {
       // TODO
+      e.printStackTrace();
       return false;
     }
   }
@@ -141,15 +149,19 @@ public class CommitApplier {
       return true;
     } catch (NoSuchFileException e) {
       // TODO
+      e.printStackTrace();
       return false;
     } catch (DirectoryNotEmptyException e) {
       // TODO
+      e.printStackTrace();
       return false;
-    } catch (IOException o) {
+    } catch (IOException e) {
       // TODO
+      e.printStackTrace();
       return false;
-    } catch (SecurityException o) {
+    } catch (SecurityException e) {
       // TODO
+      e.printStackTrace();
       return false;
     }
   } 

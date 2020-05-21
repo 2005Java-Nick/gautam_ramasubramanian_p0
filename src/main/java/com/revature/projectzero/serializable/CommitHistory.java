@@ -13,6 +13,7 @@ public class CommitHistory implements Serializable {
   private HashMap<String, byte[]> snapshot;
   
   private String rootDirectory;
+  private int rootId;
   
   private int headCommitIndex;
   private String headCommitId;
@@ -29,8 +30,9 @@ public class CommitHistory implements Serializable {
   
   }
 
-  public CommitHistory(String rootDirectory, String branchName, Commit initialcommit) {
+  public CommitHistory(String rootDirectory, int rootId, String branchName, Commit initialcommit) {
     this.rootDirectory = rootDirectory;
+    this.rootId = rootId;
     commitTree = new HashMap<>();
     commitTree.put(branchName, new ArrayList<Commit>());
     this.headBranchId = branchName;
@@ -45,18 +47,19 @@ public class CommitHistory implements Serializable {
     return "branch_" + this.branchNameIndex;
   }
 
-  private void addBranch(String branchName) {
+  public void addBranch(String branchName) {
     commitTree.put(branchName, new ArrayList<Commit>());
     for (int i = 0; i <= this.headCommitIndex; i++) {
       Commit c = commitTree.get(this.headBranchId).get(i);
       commitTree.get(branchName).add(c);
     }
-    this.headBranchId = branchName;
   }
 
   public void addCommit(Commit commit, HashMap<String, byte[]> snapshot) {
     if (this.headCommitIndex != commitTree.get(this.headBranchId).size() - 1) {
-      this.addBranch(this.getBranchName());
+      String branchName = this.getBranchName();
+      this.addBranch(branchName);
+      this.headBranchId = branchName;
     }
     commitTree.get(this.headBranchId).add(commit);
     this.headCommitIndex++;
@@ -83,6 +86,10 @@ public class CommitHistory implements Serializable {
     return this.commitTree.get(this.headBranchId);
   }
 
+  public ArrayList<Commit> getBranch(String branchName) {
+    return this.commitTree.get(branchName);
+  }
+
   public HashMap<String, ArrayList<Commit>> getCommitTree() {
     return this.commitTree;
   }
@@ -97,5 +104,9 @@ public class CommitHistory implements Serializable {
 
   public HashMap<String, byte[]> getSnapshot() {
     return this.snapshot;
+  }
+
+  public int getId() {
+    return this.rootId;
   }
 }
