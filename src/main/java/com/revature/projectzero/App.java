@@ -53,6 +53,7 @@ public class App {
       int rootId = dao.getRootId(rootDirName);
       Commit commit = new Commit(Commiter.getRandomId(), new TreeSet<Change>(), "initial commit");
       history = new CommitHistory(rootDirPath, rootId, "master", commit);
+      consoleDriver.getTreeDiagram(history); 
       serializer.createDirectory(saveImageDir);
       serializer.writeToFile(saveImagePath, history);
     }
